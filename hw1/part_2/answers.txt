@@ -1,0 +1,16 @@
+hdfs dfs -mkdir /new_directory
+hdfs dfs -mkdir /new_directory/nested_directory
+hdfs dfs -rm -skipTrash /file
+hdfs dfs -touchz /new_directory/nested_directory/new_file
+hdfs dfs -rm /new_directory/nested_directory/new_file
+hdfs dfs -rm -r /new_directory
+---------------------------------------------------------
+hdfs dfs -put AB_NYC_2019.csv /nyc_airbnb/
+hdfs dfs -cat /nyc_airbnb/AB_NYC_2019.csv
+hdfs dfs -tail /nyc_airbnb/AB_NYC_2019.csv
+hdfs dfs -head /nyc_airbnb/AB_NYC_2019.csv
+hdfs dfs -cp /nyc_airbnb/AB_NYC_2019.csv /airbnb_copy.csv
+---------------------------------------------------------
+hdfs dfs -setrep -w 2 /airbnb_copy
+hdfs fsck /airbnb_copy -files -blocks -locations
+hdfs fsck -blockId blk_1073741837
