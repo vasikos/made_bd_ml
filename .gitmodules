@@ -1,0 +1,3 @@
+[submodule "hw1/docker-hadoop"]
+	path = hw1/docker-hadoop
+	url = https://github.com/big-data-europe/docker-hadoop.git
