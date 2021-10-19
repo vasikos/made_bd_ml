@@ -1,6 +1,6 @@
 hdfs dfs -mkdir /new_directory
 hdfs dfs -mkdir /new_directory/nested_directory
-hdfs dfs -rm -skipTrash /file
+hdfs dfs -rm -skipTrash /file # Trash в HDFS это скрытый каталог в который переносятся файлы (логически переносятся, но физически все остается на местах) после удаления и удаляются по истечению времени хранения в корзине
 hdfs dfs -touchz /new_directory/nested_directory/new_file
 hdfs dfs -rm /new_directory/nested_directory/new_file
 hdfs dfs -rm -r /new_directory
@@ -11,6 +11,6 @@ hdfs dfs -tail /nyc_airbnb/AB_NYC_2019.csv
 hdfs dfs -head /nyc_airbnb/AB_NYC_2019.csv
 hdfs dfs -cp /nyc_airbnb/AB_NYC_2019.csv /airbnb_copy.csv
 ---------------------------------------------------------
-hdfs dfs -setrep -w 2 /airbnb_copy
+hdfs dfs -setrep -w 2 /airbnb_copy # Уменьшается довольно быстро, но если увеличить число копий до 4 на машине с 3 DN, то ошибку не пишет, но пытается выполнить
 hdfs fsck /airbnb_copy -files -blocks -locations
 hdfs fsck -blockId blk_1073741837
