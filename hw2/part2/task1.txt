@@ -1,0 +1,29 @@
+# Не нашел как красиво убрать header из csv, так что пришлось сделать не очень красиво. Но работает
+
+CREATE EXTERNAL TABLE artists_ext(
+    mbid STRING,
+    artist_mb STRING,
+    artist_lastfm STRING,
+    country_mb STRING,
+    country_lastfm STRING,
+    tags_mb STRING,
+    tags_lastfm STRING,
+    listeners_lastfm INT,
+    scrobbles_lastfm INT,
+    ambiguous_artist STRING
+)
+row format delimited fields terminated by ',' stored as textfile location '/user/vasikos/artists_data';
+
+CREATE TABLE artists(
+    mbid STRING,
+    artist_mb STRING,
+    artist_lastfm STRING,
+    country_mb STRING,
+    country_lastfm STRING,
+    tags_mb STRING,
+    tags_lastfm STRING,
+    listeners_lastfm INT,
+    scrobbles_lastfm INT,
+    ambiguous_artist STRING
+);
+INSERT OVERWRITE TABLE artists select * from artists_ext where mbid<>'mbid'

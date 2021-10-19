@@ -1,0 +1,60 @@
+### A
+
+SELECT artist_lastfm, scrobbles_lastfm
+FROM artists
+ORDER BY scrobbles_lastfm DESC
+LIMIT 1;
+
+# RESULT: The Beatles
+
+### B
+
+SELECT tag, count(*) as cnt
+FROM artists LATERAL VIEW explode(split(lower(tags_lastfm), '; ')) artists AS tag
+WHERE tags_lastfm <> ''
+GROUP BY tag
+ORDER BY cnt DESC
+LIMIT 1;
+
+# RESULT: seen live
+
+
+### C
+
+SELECT artist, AVG(t.listeners) as avg_listeners
+FROM (
+         SELECT top_tags.tag, artist_tag.artist_lastfm as artist, artist_tag.listeners_lastfm as listeners
+         FROM (
+                  SELECT tag, count(*) as cnt
+                  FROM artists LATERAL VIEW explode(split(lower(tags_lastfm), '; ')) artists AS tag
+                  WHERE tags_lastfm <> ''
+                  GROUP BY tag
+                  ORDER BY cnt DESC
+                  LIMIT 10
+              ) as top_tags
+                  LEFT JOIN
+              (
+                  SELECT tag, artist_lastfm, listeners_lastfm
+                  FROM artists LATERAL VIEW explode(split(lower(tags_lastfm), '; ')) artists AS tag
+                  WHERE tag <> ''
+              ) as artist_tag
+              ON top_tags.tag = artist_tag.tag
+     ) as t
+GROUP BY artist
+ORDER BY avg_listeners DESC
+LIMIT 10
+;
+
+# RESULT: Coldplay, Radiohead, Red Hot Chili Peppers, Rihanna, Eminem, The Killers, Kanye West, Nirvana, Muse, Queen
+
+
+### D top5 countries by scrobbles
+
+SELECT country_lastfm, SUM(scrobbles_lastfm) as popularity
+FROM artists
+GROUP BY country_lastfm
+ORDER BY popularity DESC
+LIMIT 5;
+
+# RESULT: United States, United Kingdom, Germany, Canada, Sweeden
+
